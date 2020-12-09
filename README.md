@@ -1,4 +1,4 @@
-Prerequisites: 
+Prerequisites
 a. Installed Zookeeper and Kafka on PC
 b. Installed kafka-python pip package
 

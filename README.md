@@ -1,3 +1,7 @@
+Prerequisites: 
+Installed Zookeeper and Kafka on PC
+Installed kafka-python pip package
+
 1. Start zookeeper: bin/zookeeper-server-start.sh config/zookeeper.properties
 2. Start Kafka: bin/kafka-server-start.sh config/server.properties
 3. Create topic: bin/kafka-topics.sh --create --topic <topic_name> --bootstrap-server localhost:9092 or run NewTopic.py

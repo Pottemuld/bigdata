@@ -1,5 +1,7 @@
 Prerequisites
+
 a. Installed Zookeeper and Kafka on PC
+
 b. Installed kafka-python pip package
 
 1. Start zookeeper: bin/zookeeper-server-start.sh config/zookeeper.properties

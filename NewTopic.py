@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from kafka.admin import KafkaAdminClient, NewTopic
 
 

@@ -1,7 +1,7 @@
 from kafka import KafkaConsumer
 
 consumer = KafkaConsumer(
-   'sample',
+   'csv_test',
     enable_auto_commit=True,
     group_id='my-group-1',
     bootstrap_servers=['localhost:9092'])

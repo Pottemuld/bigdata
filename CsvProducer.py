@@ -3,7 +3,7 @@ import csv
 import json
 from kafka import KafkaProducer
 class CsvProducer:
-    def __init__(self, date = "2020-10-12"):
+    def __init__(self, date = "2020-10-13"):
         self
         self.date = date
         self.producer = KafkaProducer(

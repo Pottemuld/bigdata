@@ -46,17 +46,17 @@ class TweetLookup:
         elif (int(time.time() - self.time_token1) > 900):
             self.count_token1 = 0
             self.time_token1 = 0
-            return self.getHeader
+            return self.getHeader()
         elif (int(time.time() - self.time_token2) > 900):
             self.count_token2 = 0
             self.time_token2 = 0
-            return self.getHeader
+            return self.getHeader()
         else:
             if self.time_token1 < self.time_token2:
                 time.sleep(int (self.time_token1+900)-self.time_token1)
             else:
                 time.sleep(int (self.time_token2+900)-self.time_token2)
-            return self.getHeader
+            return self.getHeader()
         
 
 
@@ -67,6 +67,7 @@ class TweetLookup:
             #update day started kafka topic
             if tweet['date'] != self.currently_prosccesing_day:
                 self.currently_prosccesing_day = tweet['date']
+                print(self.currently_prosccesing_day)
                 self.producer.send("tweet-lookup.dateStarted.refrence", bytearray(self.currently_prosccesing_day, encoding='utf-8'))
                 self.producer.flush()
 
@@ -75,22 +76,22 @@ class TweetLookup:
             #lookup location if given in tweet
             if tweet['country_code'] != 'NULL':
                 #tweet_id = '1315140365503156225'
-                response_tweet = requests.get(self.base_request + tweet_id + self.expansion_location + '', headers=self.getHeader).json()
+                response_tweet = requests.get(self.base_request + tweet_id + self.expansion_location + '', headers=self.getHeader()).json()
 
                 if not 'errors' in response_tweet:
                     location = response_tweet['includes']['places'][0]['country_code']
                     
                     #send to topic
                     message = {'date' : tweet['date'], 'location' : location}
-                    self.producer.send("location_stream", bytearray(json.dumps(message), encoding='utf-8'))
+                    self.producer.send("tweet.date-location.source", bytearray(json.dumps(message), encoding='utf-8'))
                     self.producer.flush()
 
             ## lookup location from user
             else:
-                response_tweet = requests.get(self.base_request + tweet_id + self.expansion_author + '', headers=self.getHeader).json()
+                response_tweet = requests.get(self.base_request + tweet_id + self.expansion_author + '', headers=self.getHeader()).json()
                 if not 'errors' in response_tweet:        
                     author_id = response_tweet['data']['author_id']
-                    response_user = requests.get('https://api.twitter.com/2/users/' + author_id + '?user.fields=id,location,name', headers=self.getHeader).json()
+                    response_user = requests.get('https://api.twitter.com/2/users/' + author_id + '?user.fields=id,location,name', headers=self.getHeader()).json()
                     
                     #if user have provided location
                     if 'location' in response_user['data']:
@@ -98,7 +99,7 @@ class TweetLookup:
                         #send to topic
                         location = response_user['data']['location']
                         message = {'date' : tweet['date'], 'location' : location}
-                        self.producer.send("location_stream", bytearray(json.dumps(message), encoding='utf-8'))
+                        self.producer.send("tweet.date-location.source", bytearray(json.dumps(message), encoding='utf-8'))
                         self.producer.flush()
                     # if no user provided location then set location to unknown
                     else:

@@ -6,8 +6,8 @@ from kafka import KafkaConsumer, KafkaProducer
 class TweetLookup:
     def __init__(self):
         self
-        self.bearer_token = 'AAAAAAAAAAAAAAAAAAAAANnZKQEAAAAA1dCBWQ6qyYCmG2LBdDTvBZ%2FUHpE%3Dx6SELuPPaUUVgNsF4YGYxEgtXQkwhoUskKTyQMQ3teqXOgOxCo'
-        self.bearer_token2 = 'AAAAAAAAAAAAAAAAAAAAAPLZKQEAAAAAu7d%2F9pJlC2fbDNjDFKDhhjH8rTc%3DoHfa0tcrR5BoQwl9Ml87Jt3DeC6N6nmtG0RfILM8dLuZCyjZTo'
+        self.bearer_token2 = 'AAAAAAAAAAAAAAAAAAAAANnZKQEAAAAA1dCBWQ6qyYCmG2LBdDTvBZ%2FUHpE%3Dx6SELuPPaUUVgNsF4YGYxEgtXQkwhoUskKTyQMQ3teqXOgOxCo'
+        self.bearer_token = 'AAAAAAAAAAAAAAAAAAAAAPLZKQEAAAAAu7d%2F9pJlC2fbDNjDFKDhhjH8rTc%3DoHfa0tcrR5BoQwl9Ml87Jt3DeC6N6nmtG0RfILM8dLuZCyjZTo'
 
         # for handling the twitter 900 request/15 min restraint
         self.count_token1 = 0
@@ -31,31 +31,38 @@ class TweetLookup:
         self.expansion_location = '?expansions=geo.place_id&place.fields=contained_within,country,country_code,full_name,geo,id,name,place_type'
     
     def getHeader(self):
-        if (self.count_token1 < 900):
+        if (self.count_token1 < 300):
+            print('count1= '+str(self.count_token1))
             if self.time_token1 == 0:
                 self.time_token1 = time.time()
             self.count_token1 += 1
             headers = {"Authorization": "Bearer " + self.bearer_token}
             return headers
-        elif (self.count_token2 < 900):
+        elif (self.count_token2 < 300):
+            print('count2= '+str(self.count_token2))
             self.time_token2 == 0
             self.time_token2 = time.time()
             self.count_token2 += 1
             headers = {"Authorization": "Bearer " + self.bearer_token2}
             return headers
         elif (int(time.time() - self.time_token1) > 900):
+            print('resetting 1')
             self.count_token1 = 0
             self.time_token1 = 0
             return self.getHeader()
         elif (int(time.time() - self.time_token2) > 900):
+            print('resetting 1')
             self.count_token2 = 0
             self.time_token2 = 0
             return self.getHeader()
         else:
+            print('into wait part')
             if self.time_token1 < self.time_token2:
-                time.sleep(int (self.time_token1+900)-self.time_token1)
+                print('waiting for 1')
+                time.sleep(int (self.time_token1+905)-time.time())
             else:
-                time.sleep(int (self.time_token2+900)-self.time_token2)
+                print('waitng for 2')
+                time.sleep(int (self.time_token2+905)- time.time())
             return self.getHeader()
         
 

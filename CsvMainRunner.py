@@ -22,9 +22,11 @@ class CsvMainRunner():
         self.producer.readFile(self.start_day.isoformat())
 
         for m in self.consumer:
-            print(m.value)
-            dateArray_y_m_d = str(m.value).split('-')
-            current_day = date.date(dateArray_y_m_d[0], dateArray_y_m_d[1], dateArray_y_m_d[2])
+            recived = str(m.value, 'utf-8')
+            #check if date have already ben run
+            print('recived this date: '+ recived)
+            dateArray_y_m_d = str(recived).split('-')
+            current_day = date.date(int(dateArray_y_m_d[0]), int(dateArray_y_m_d[1]), int(dateArray_y_m_d[2]))
             nextDay = current_day - date.timedelta(days= 1)
             if nextDay >= self.end_day:
                 self.producer.readFile(nextDay.isoformat())

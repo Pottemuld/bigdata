@@ -15,7 +15,6 @@ class TweetLookup:
         self.time_token1= 0
         self.time_token2 =0
 
-        self.currently_prosccesing_day = 0
 
         self.consumer = KafkaConsumer(
            'tweet.dataset.source',
@@ -72,11 +71,9 @@ class TweetLookup:
         for m in self.consumer:
             tweet = json.loads(m.value)
             #update day started kafka topic
-            if tweet['date'] != self.currently_prosccesing_day:
-                self.currently_prosccesing_day = tweet['date']
-                print(self.currently_prosccesing_day)
-                self.producer.send("tweet-lookup.dateStarted.refrence", bytearray(self.currently_prosccesing_day, encoding='utf-8'))
-                self.producer.flush()
+
+            self.producer.send("tweet-lookup.dateStarted.refrence", bytearray(tweet['date'], encoding='utf-8'))
+            self.producer.flush()
 
             tweet_id = tweet['tweet_id']
 

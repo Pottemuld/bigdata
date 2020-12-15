@@ -30,6 +30,7 @@ class CsvMainRunner():
 
     def run(self):
         #write first day to topic
+        self.dateprcecced.append(self.start_day)
         self.producer.readFile(self.start_day.isoformat())
 
         for m in self.consumer:

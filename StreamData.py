@@ -29,9 +29,10 @@ input_df = (spark
 input_df.printSchema()
 
 
-count = input_df.groupBy(F.col('passed_data.location')).count()
+counted = input_df.groupBy(F.col('passed_data.location'), F.col('passed_data.date')).count().sort(F.col('count').desc())
 
-out = count.writeStream.outputMode('complete').format('console').start()
+
+out = counted.writeStream.outputMode('complete').format('console').start()
 
 out.awaitTermination()
 

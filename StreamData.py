@@ -1,13 +1,12 @@
-#from pyspark.shell import spark
 from pyspark.sql.functions import *
-from pyspark.sql import functions as F
-import pyspark
+from pyspark.sql import functions as F, DataFrameWriter, SparkSession
 from pyspark.sql.types import StructType, StructField, StringType
-
-
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import explode
-from pyspark.sql.functions import split
+def write_to_postgres(df, epochId):
+    url = 'jdbc:postgresql://localhost:5432/bigdata'
+    username = ''
+    password = ''
+    driver = 'org.postgresql.Driver'
+    df.write.mode('append').jdbc("jdbc:postgresql://localhost:5432/bigdata", "public.data", properties={"user": "postgres", "password": "Test"})
 
 spark = SparkSession \
     .builder \
@@ -15,7 +14,6 @@ spark = SparkSession \
     .getOrCreate()
 
 schema = StructType([StructField("date", StringType(), False), StructField("location", StringType(), False)])
-#schema = StructType().add('data', StringType()).add('location', StringType())
 
 input_df = (spark
             .readStream
@@ -26,18 +24,12 @@ input_df = (spark
             .select(from_json(F.col('value').cast("string"), schema).alias('passed_data')))
 
 
-input_df.printSchema()
+counted = input_df.groupBy(F.col('passed_data.location'), F.col('passed_data.date')).count()
 
+batched = counted.writeStream.outputMode('update').foreachBatch(write_to_postgres).start()
 
-counted = input_df.groupBy(F.col('passed_data.location'), F.col('passed_data.date')).count().sort(F.col('count').desc())
+#out = counted.writeStream.outputMode('complete').format('console').start()
 
+batched.awaitTermination()
 
-out = counted.writeStream.outputMode('complete').format('console').start()
-
-out.awaitTermination()
-
-
-#streaming_counts_df = (streaming_input_df\
-#    .groupBy(streaming_input_df.date, streaming_input_df.location)\
-#    .count())
 

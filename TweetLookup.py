@@ -20,10 +20,10 @@ class TweetLookup:
            'tweet.dataset.source',
             enable_auto_commit=True,
             group_id='my-group-1',
-            bootstrap_servers=['localhost:9092'])
+            bootstrap_servers=['10.123.252.210:9092'])
 
         self.producer = KafkaProducer(
-            bootstrap_servers=['localhost:9092'])
+            bootstrap_servers=['10.123.252.210:9092'])
 
         self.base_request = 'https://api.twitter.com/2/tweets/'
         self.expansion_author = '?expansions=author_id'

@@ -1,7 +1,7 @@
 import psycopg2
 
 try:
-    connection = psycopg2.connect(user="postgres", password="Test", host="localhost", port="5432", database="bigdata")
+    connection = psycopg2.connect(user="postgres", password="Test", host="10.123.252.210", port="5432", database="bigdata")
     cursor = connection.cursor()
     query = "select * from data;"
 

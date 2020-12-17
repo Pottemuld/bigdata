@@ -6,7 +6,7 @@ class CsvProducer:
     def __init__(self):
         self
         self.producer = KafkaProducer(
-        bootstrap_servers=['localhost:9092'])
+        bootstrap_servers=['10.123.252.210:9092'])
 
     def readFile(self, date):
         filepath = "data/dailies/" + date + "/" + date + "_clean-dataset.tsv"

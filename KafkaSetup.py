@@ -4,7 +4,7 @@ from kafka.admin import KafkaAdminClient, NewTopic
 topics = ["tweet.dataset.source", "tweet.date-location.source", "tweet-lookup.dateStarted.refrence"]
 
 admin_client = KafkaAdminClient(
-    bootstrap_servers="localhost:9092",
+    bootstrap_servers="10.123.252.210:9092",
     client_id='test'
     )
 

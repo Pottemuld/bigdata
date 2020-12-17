@@ -16,7 +16,7 @@ class CsvMainRunner():
             'tweet-lookup.dateStarted.refrence',
              enable_auto_commit=True,
              group_id='my-group-1',
-             bootstrap_servers=['localhost:9092'])
+             bootstrap_servers=['10.123.252.210:9092'])
 
     def check_date(self, date):
         if date in self.dateprcecced:

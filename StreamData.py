@@ -3,7 +3,7 @@ from pyspark.sql import functions as F, DataFrameWriter, SparkSession
 from pyspark.sql.types import StructType, StructField, StringType
 
 def write_to_postgres(df, epochId):
-    df.write.mode('append').jdbc("jdbc:postgresql://localhost:5432/bigdata", "public.data", properties={"user": "postgres", "password": "Test"})
+    df.write.mode('append').jdbc("jdbc:postgresql://10.123.252.210:5432/bigdata", "public.data", properties={"user": "postgres", "password": "Test"})
 
 spark = SparkSession \
     .builder \
@@ -15,7 +15,7 @@ schema = StructType([StructField("date", StringType(), False), StructField("loca
 input_df = (spark
             .readStream
             .format('kafka')
-            .option('kafka.bootstrap.servers', 'localhost:9092')
+            .option('kafka.bootstrap.servers', '10.123.252.210:9092')
             .option('subscribe', 'tweet.date-location.source')
             .load()
             .select(from_json(F.col('value').cast("string"), schema).alias('passed_data')))

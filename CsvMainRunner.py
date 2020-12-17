@@ -5,7 +5,7 @@ import sys
 from kafka import KafkaConsumer
 
 class CsvMainRunner():
-    def __init__(self, start_day = date.date(2020, 10, 15), end_day = date.date(2020, 10,13)):
+    def __init__(self, start_day = date.date(2020, 10, 12), end_day = date.date(2020, 3, 22)):
         self
         self.start_day = start_day
         self.end_day = end_day 
@@ -22,7 +22,7 @@ class CsvMainRunner():
         if date in self.dateprcecced:
             return False
         else:
-            print('appending day:'+date)
+            #print('appending day:'+date)
             self.dateprcecced.append(date)
             return True
 
@@ -35,7 +35,7 @@ class CsvMainRunner():
         for m in self.consumer:
             recived = str(m.value, 'utf-8')
             if self.check_date(recived):
-                print('recived this date: '+ recived)
+                #print('recived this date: '+ recived)
                 dateArray_y_m_d = str(recived).split('-')
                 current_day = date.date(int(dateArray_y_m_d[0]), int(dateArray_y_m_d[1]), int(dateArray_y_m_d[2]))
                 nextDay = current_day - date.timedelta(days= 1)

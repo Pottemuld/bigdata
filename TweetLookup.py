@@ -20,10 +20,10 @@ class TweetLookup:
            'tweet.dataset.source',
             enable_auto_commit=True,
             group_id='my-group-1',
-            bootstrap_servers=['10.123.252.210:9092'])
+            bootstrap_servers=['localhost:9092'])
 
         self.producer = KafkaProducer(
-            bootstrap_servers=['10.123.252.210:9092'])
+            bootstrap_servers=['localhost:9092'])
 
         self.base_request = 'https://api.twitter.com/2/tweets/'
         self.expansion_author = '?expansions=author_id'
@@ -31,36 +31,36 @@ class TweetLookup:
     
     def getHeader(self):
         if (self.count_token1 < 300):
-            print('count1= '+str(self.count_token1))
+            #print('count1= '+str(self.count_token1))
             if self.time_token1 == 0:
                 self.time_token1 = time.time()
             self.count_token1 += 1
             headers = {"Authorization": "Bearer " + self.bearer_token}
             return headers
         elif (self.count_token2 < 300):
-            print('count2= '+str(self.count_token2))
+            #print('count2= '+str(self.count_token2))
             self.time_token2 == 0
             self.time_token2 = time.time()
             self.count_token2 += 1
             headers = {"Authorization": "Bearer " + self.bearer_token2}
             return headers
         elif (int(time.time() - self.time_token1) > 900):
-            print('resetting 1')
+            #print('resetting 1')
             self.count_token1 = 0
             self.time_token1 = 0
             return self.getHeader()
         elif (int(time.time() - self.time_token2) > 900):
-            print('resetting 1')
+            #print('resetting 1')
             self.count_token2 = 0
             self.time_token2 = 0
             return self.getHeader()
         else:
-            print('into wait part')
+            #print('into wait part')
             if self.time_token1 < self.time_token2:
-                print('waiting for 1')
+                #print('waiting for 1')
                 time.sleep(int (self.time_token1+905)-time.time())
             else:
-                print('waitng for 2')
+                #print('waitng for 2')
                 time.sleep(int (self.time_token2+905)- time.time())
             return self.getHeader()
         

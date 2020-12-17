@@ -1,11 +1,8 @@
 from pyspark.sql.functions import *
 from pyspark.sql import functions as F, DataFrameWriter, SparkSession
 from pyspark.sql.types import StructType, StructField, StringType
+
 def write_to_postgres(df, epochId):
-    url = 'jdbc:postgresql://localhost:5432/bigdata'
-    username = ''
-    password = ''
-    driver = 'org.postgresql.Driver'
     df.write.mode('append').jdbc("jdbc:postgresql://localhost:5432/bigdata", "public.data", properties={"user": "postgres", "password": "Test"})
 
 spark = SparkSession \

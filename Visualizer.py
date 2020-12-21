@@ -9,7 +9,7 @@ count = []
 try:
     connection = psycopg2.connect(user="postgres", password="Test", host="localhost", port="5432", database="bigdata")
     cursor = connection.cursor()
-    query = "SELECT date, location, count FROM data WHERE location NOT IN ('Unknown', 'unknown') ORDER BY count DESC;"
+    query = "SELECT date, location, count FROM data WHERE location NOT IN ('Unknown', 'unknown') ORDER BY count DESC LIMIT 15;"
 
     cursor.execute(query)
 
@@ -18,9 +18,8 @@ try:
         dates.append(row[0])
         locations.append(row[1])
         count.append(row[2])
-        count_series={"count": count}
 
-    dict = {'Location': locations[:15], 'Count': count[:15]}
+    dict = {'Location': locations, 'Count': count}
     df = pd.DataFrame(dict)
     df.plot(kind='bar', x='Location', y='Count')
     plt.subplots_adjust(top=0.88, bottom=0.3, left=0.11, right=0.9, hspace=0.2, wspace=0.2)
